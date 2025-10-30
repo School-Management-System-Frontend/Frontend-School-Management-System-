@@ -48,7 +48,7 @@ const GlassAuthForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-[url('/background.jpg')] bg-cover bg-center text-black">
+    <div className="flex justify-center items-center h-screen bg-[url('/background2.0.png')] bg-cover bg-center text-black">
       <svg style={{ display: "none" }}>
         <filter id="glass-distortion">
           <feTurbulence
@@ -115,7 +115,7 @@ const GlassAuthForm = () => {
                 Don’t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="text-white font-semibold hover:underline cursor-pointer"
+                  className="text-blue-600 font-semibold hover:underline cursor-pointer "
                 >
                   Sign up
                 </button>
@@ -173,18 +173,26 @@ const GlassAuthForm = () => {
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-white/40 placeholder-gray-300"
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-black/70 text-amber-50 border border-white/30 rounded-xl font-semibold hover:bg-white/30 hover:text-black transition cursor-pointer"
-                >
-                  Sign Up
-                </button>
+<button
+  type="submit"
+  className="w-full py-3 bg-black/70 text-amber-50 border border-white/30 rounded-xl font-semibold hover:bg-white/30 hover:text-black transition cursor-pointer"
+>
+  Sign Up
+</button>
+    <section className="flex items-start mb-5">
+      <div className="flex items-center h-5">
+        <input id="terms" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+      </div>
+      <label for="terms" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a></label>
+    </section>
+                     
+
               </form>
               <p className="text-sm text-center mt-5 opacity-80">
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="text-white font-semibold hover:underline cursor-pointer"
+                  className="text-blue-500 font-semibold hover:underline cursor-pointer"
                 >
                   Login
                 </button>
