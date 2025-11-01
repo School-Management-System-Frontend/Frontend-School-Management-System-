@@ -3,6 +3,7 @@
   margin: 0 auto;
   /* padding: 2rem; */
   /* text-align: center; */
+  
 }
 
 .logo {
@@ -40,3 +41,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.input { @apply w-full outline-none text-stone-800 placeholder:text-stone-600/60 border border-stone-200 text-sm py-2 px-2.5 shadow-sm bg-white rounded-lg hover:border-stone-300 focus:border-stone-400; }
+.select { @apply w-full outline-none text-stone-800 border border-stone-200 text-sm py-2 px-2.5 shadow-sm bg-white rounded-lg hover:border-stone-300 focus:border-stone-400; }
+
+
