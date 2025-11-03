@@ -26,6 +26,7 @@ export default function Login(){
                 <div>
                     <label for="password" className="text-sm font-medium block mb-2 text-gray-900">Pin</label>
                     <input 
+
                         type="password" 
                         name="password" 
                         id="password" 
@@ -35,7 +36,7 @@ export default function Login(){
                     />
                 </div>
 
-                <div classNameName="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center">
                         <input 
                             id="remember-me" 
