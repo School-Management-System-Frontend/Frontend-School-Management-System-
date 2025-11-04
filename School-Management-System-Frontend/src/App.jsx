@@ -5,6 +5,7 @@ import Login from './pages/login'
 import AcademicHistory from './pages/AcademicHistory'
 import HealthInfo from './pages/HealthInfo'
 import DocumentsUpload from './pages/DocumentsUpload'
+import Personal_Info from './pages/personal'
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/academic" element={<AcademicHistory />} />
+          <Route path="/personal" element={<Personal_Info />} />
           <Route path="/academic" element={<AcademicHistory />} />
           <Route path="/health" element={<HealthInfo />} />
           <Route path="/documents" element={<DocumentsUpload />} />

@@ -7,7 +7,12 @@ const Home = () => {
       <h1 className='text-blue-500'>This is the Home Page</h1>
       <Link to="/login">
         <h3 className='cursor-pointer'>
-          Go to Login Page
+          Go to Auth Page
+        </h3>
+      </Link>
+      <Link to="/personal">
+        <h3 className='cursor-pointer'>
+          Go to Personal Info Page
         </h3>
       </Link>
       <Link to="/academic">
