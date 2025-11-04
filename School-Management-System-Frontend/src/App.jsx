@@ -6,6 +6,7 @@ import AcademicHistory from './pages/AcademicHistory'
 import HealthInfo from './pages/HealthInfo'
 import DocumentsUpload from './pages/DocumentsUpload'
 import Personal_Info from './pages/personal'
+import GuardianForm from './pages/guardian'
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
           <Route path="/academic" element={<AcademicHistory />} />
           <Route path="/health" element={<HealthInfo />} />
           <Route path="/documents" element={<DocumentsUpload />} />
+           <Route path="/guardian" element={<GuardianForm />} />
+
+
         </Routes>
     </Router>
   )
