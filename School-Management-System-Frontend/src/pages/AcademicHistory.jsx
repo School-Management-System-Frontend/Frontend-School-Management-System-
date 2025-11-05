@@ -108,7 +108,7 @@ const AcademicHistory = () => {
         </form>
 
         <div className="pl-32">
-          <img src={AcademicPic} alt="Academic Illustration" className="w-100 h-100 mt-10" />
+          <img src={AcademicPic} alt="Academic Illustration" className="w-100 h-100 fixed top-30 right-40" />
         </div>
       </div>
     </div>

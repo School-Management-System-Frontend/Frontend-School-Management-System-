@@ -15,6 +15,11 @@ const Home = () => {
           Go to Personal Info Page
         </h3>
       </Link>
+      <Link to="/guardian">
+        <h3 className='cursor-pointer'>
+          Go to Guardian Info Page
+        </h3>
+      </Link>
       <Link to="/academic">
         <h3 className='cursor-pointer'>
           Go to Academic History Page
@@ -28,6 +33,11 @@ const Home = () => {
       <Link to="/documents">
         <h3 className='cursor-pointer'>
           Go to Document Upload Page
+        </h3>
+      </Link>
+      <Link to="/review">
+        <h3 className='cursor-pointer'>
+          Go to Review Page
         </h3>
       </Link>
     </div>

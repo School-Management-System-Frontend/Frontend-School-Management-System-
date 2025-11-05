@@ -96,10 +96,10 @@ const DocumentsUpload = () => {
   return (
     <div className="">
       <p className="text-4xl font-bold text-center mt-4">Required Documents</p>
-      <div className="flex justify-center items-center">
+      <div className="flex ">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 mt-4 mb-6 pl-42"
+          className="flex flex-col gap-4 mt-4 mb-6 pl-60"
         >
           {Object.entries(fileConfigs).map(([fieldName, config]) => (
             <div key={fieldName} className="mb-4">
@@ -149,7 +149,7 @@ const DocumentsUpload = () => {
           <img
             src={DocumentPic}
             alt="Documents Illustration"
-            className="w-90 h-92 mt-5"
+            className="w-90 h-92 fixed top-30 right-40"
           />
         </div>
       </div>
