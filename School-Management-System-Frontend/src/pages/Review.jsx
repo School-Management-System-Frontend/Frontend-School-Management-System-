@@ -11,28 +11,20 @@ const Review = () => {
     personal: {
       firstName: "John",
       lastName: "Doe",
+      middleName: "Kay",
       gender: "Male",
       birthDate: "2015-05-15",
       nationality: "Nigerian",
-      classLevel: "JSS 1",
-      academicYear: "2023/2024",
-      dateOfAdmission: "2023-09-01",
       address: "123 School Road",
-      city: "Lagos",
-      parent1Name: "Jane Doe",
-      parent1Relation: "Mother",
-      parent1Phone: "08012345678",
-      parent1Email: "jane@example.com",
-      parent2Name: "James Doe",
-      parent2Relation: "Father",
-      parent2Phone: "08087654321",
-      parent2Email: "james@example.com"
+      phone: "0242345678",
+      email: 'name@example.com'
+
     },
     guardian: {
       name: "Uncle Ben",
       relation: "Uncle",
-      phone: "08011223344",
-      email: ''
+      phone: "0242345678",
+      email: 'name@example.com'
     },
     academic: {
       lastSchool: "Previous School Name",

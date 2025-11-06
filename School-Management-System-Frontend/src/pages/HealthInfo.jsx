@@ -126,7 +126,7 @@ const HealthInfo = () => {
           <img
             src={HealthPic}
             alt="Health Illustration"
-            className="w-60 lg:w-120 h-auto"
+            className="w-60 lg:w-100 h-auto lg:fixed lg:top-30 lg:right-30"
           />
         </div>
       </div>

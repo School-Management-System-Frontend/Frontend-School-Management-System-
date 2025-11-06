@@ -149,7 +149,7 @@ const DocumentsUpload = () => {
           <img
             src={DocumentPic}
             alt="Documents Illustration"
-            className="w-40 lg:w-70 h-auto"
+            className="w-40 lg:w-70 h-auto lg:fixed lg:top-30 lg:right-40"
           />
         </div>
       </div>

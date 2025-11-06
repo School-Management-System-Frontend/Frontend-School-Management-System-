@@ -4,59 +4,44 @@ import Input from '../components/FormInput.jsx';
 import PersonalPic from '../assets/personal.png';
 
 const Personal = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    gender: "",
-    dateOfBirth: "",
-    nationality: "",
-    address: "",
-    phoneNumber: "",
-    emailAddress: ""
-  });
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [gender, setGender] = useState('');
+  const [dateOfBirth, setdateOfBirth] = useState('');
+  const [nationality, setNationality] = useState('');
+  const [address, setAddress] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Simple validation for required fields
-    const requiredFields = ['firstName', 'lastName', 'gender', 'dateOfBirth', 
-      'nationality', 'address', 'phoneNumber', 'emailAddress'];
-    
-    const emptyFields = requiredFields.filter(field => !formData[field]);
-    
-    if (emptyFields.length > 0) {
+     if (!firstName || !lastName || !gender || !dateOfBirth || !nationality || !address || !phoneNumber || !email) {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.emailAddress)) {
+    if (!emailRegex.test(email)) {
       alert("Please enter a valid email address.");
       return;
     }
 
     // Validate phone number (assumes Nigerian format)
     const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
+    if (!phoneRegex.test(phoneNumber)) {
       alert("Please enter a valid 10-digit phone number.");
       return;
     }
 
-    console.log('Form submitted:', formData);
+    console.log('Form submitted✅👍');
     // Navigate to the next page (e.g., academic history)
-    navigate('/academic');
+    navigate('/guardian');
   };
 
   return (
@@ -69,8 +54,8 @@ const Personal = () => {
           <Input 
             label="First Name" 
             name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
             width='100%'
           />
@@ -78,8 +63,8 @@ const Personal = () => {
           <Input 
             label="Last Name"
             name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             required
             width='100%'
           />
@@ -88,8 +73,8 @@ const Personal = () => {
           <Input 
             label="Middle Name (Optional)"
             name="middleName"
-            value={formData.middleName}
-            onChange={handleChange}
+            value={middleName}
+            onChange={(e) => setMiddleName(e.target.value)}
             width='100%'
           />
           
@@ -97,8 +82,8 @@ const Personal = () => {
             <p className='font-bold text-lg text-blue-700'>Gender</p>
             <select
               name="gender"
-              value={formData.gender}
-              onChange={handleChange}
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
               required
               className='w-72 p-3 rounded-md border-b-2 border-black bg-transparent 
                 text-black placeholder-gray-400 focus:outline-none focus:ring-0 
@@ -114,8 +99,8 @@ const Personal = () => {
             label="Date of Birth"
             name="dateOfBirth"
             type="date"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
+            value={dateOfBirth}
+            onChange={(e) => setdateOfBirth(e.target.value)}
             required
             width='100%'
           />
@@ -123,8 +108,8 @@ const Personal = () => {
           <Input 
             label="Nationality"
             name="nationality"
-            value={formData.nationality}
-            onChange={handleChange}
+            value={nationality}
+            onChange={(e) => setNationality(e.target.value)}
             required
             width='100%'
           />
@@ -132,8 +117,8 @@ const Personal = () => {
           <Input 
             label="Address"
             name="address"
-            value={formData.address}
-            onChange={handleChange}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             required
             width='100%'
           />
@@ -142,8 +127,8 @@ const Personal = () => {
             label="Phone Number"
             name="phoneNumber"
             type="tel"
-            value={formData.phoneNumber}
-            onChange={handleChange}
+            value={phoneNumber}
+            onChange={(e) => setphoneNumber(e.target.value)}
             required
             width='100%'
             placeholder="e.g., 0242345678"
@@ -153,8 +138,8 @@ const Personal = () => {
             label="Email Address"
             name="emailAddress"
             type="email"
-            value={formData.emailAddress}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             width='100%'
             placeholder="e.g., name@example.com"
@@ -172,7 +157,7 @@ const Personal = () => {
         </form>
       
       <div className='flex-1 flex items-start justify-center pt-16 order-1 lg:order-2'>
-        <img src={PersonalPic} alt="Personal Information" className='w-60 lg:w-96 h-auto' />
+        <img src={PersonalPic} alt="Personal Information" className='w-60 lg:w-96 h-auto lg:fixed lg:top-30 lg:right-40' />
       </div>
       </div>
     </div>

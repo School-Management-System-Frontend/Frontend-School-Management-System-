@@ -4,61 +4,49 @@ import Input from '../components/FormInput.jsx';
 import GuardianPic from '../assets/guardian.png';
 
 const GuardianForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    relationship: "",
-    occupation: "",
-    phoneNumber: "",
-    emergencyNumber: "",
-    email: "",
-    address: ""
-  });
+    const [fullName, setFullName] = useState('');
+    const [relationship, setRelationship] = useState('');
+    const [occupation, setOccupation] = useState('');
+    const [emergencyNumber, setEmergencyNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [phoneNumber, setphoneNumber] = useState('');
+    const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple validation for required fields (excluding email which is optional)
-    const requiredFields = ['fullName', 'relationship', 'occupation', 
-      'phoneNumber', 'emergencyNumber', 'address'];
-    
-    const emptyFields = requiredFields.filter(field => !formData[field]);
-    
-    if (emptyFields.length > 0) {
+    // Simple validation for required fields
+     if (!fullName || !relationship || !occupation|| !emergencyNumber || !address || !phoneNumber || !email) {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
 
-    // Validate phone numbers (assumes Nigerian format)
-    const phoneRegex = /^[0-9]{11}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      alert("Please enter a valid 11-digit phone number.");
-      return;
-    }
-    if (!phoneRegex.test(formData.emergencyNumber)) {
-      alert("Please enter a valid 11-digit emergency number.");
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
       return;
     }
 
-    // Validate email only if provided (optional field)
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      alert("Please enter a valid email address or leave it empty.");
+    // Validate phone number (assumes Nigerian format)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    const phoneEmergencyRegex = /^[0-9]{10}$/;
+    if (!phoneEmergencyRegex.test(emergencyNumber)) {
+      alert("Please enter a valid 10-digit phone number.");
       return;
     }
 
-    console.log('Form submitted:', formData);
-    // Navigate to the next page (e.g., documents or review)
-    navigate('/documents');
+    console.log('Form submitted✅👍');
+    // Navigate to the next page (e.g., academic history)
+    navigate('/academic');
   };
+
 
   return (
     <div className=''>
@@ -69,8 +57,8 @@ const GuardianForm = () => {
           <Input 
             label="Full Name"
             name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             required
             width='100%'
           />
@@ -79,8 +67,8 @@ const GuardianForm = () => {
             <p className='font-bold text-lg text-blue-700'>Relationship to Applicant</p>
             <select
               name="relationship"
-              value={formData.relationship}
-              onChange={handleChange}
+              value={relationship}
+              onChange={(e) => setRelationship(e.target.value)}
               required
               className='w-72 p-3 rounded-md border-b-2 border-black bg-transparent 
                 text-black placeholder-gray-400 focus:outline-none focus:ring-0 
@@ -97,8 +85,8 @@ const GuardianForm = () => {
           <Input 
             label="Occupation"
             name="occupation"
-            value={formData.occupation}
-            onChange={handleChange}
+            value={occupation}
+            onChange={(e) => setOccupation(e.target.value)}
             required
             width='100%'
           />
@@ -107,19 +95,19 @@ const GuardianForm = () => {
             label="Phone Number"
             name="phoneNumber"
             type="tel"
-            value={formData.phoneNumber}
-            onChange={handleChange}
+            value={phoneNumber}
+            onChange={(e) => setphoneNumber(e.target.value)}
             required
             width='100%'
-            placeholder="e.g., 08012345678"
+            placeholder="e.g., 0223456781"
           />
           
           <Input 
             label="Emergency Number"
             name="emergencyNumber"
             type="tel"
-            value={formData.emergencyNumber}
-            onChange={handleChange}
+            value={emergencyNumber}
+            onChange={(e) => setEmergencyNumber(e.target.value)}
             required
             width='100%'
             placeholder="e.g., 0242345678"
@@ -129,8 +117,8 @@ const GuardianForm = () => {
             label="Email Address (Optional)"
             name="email"
             type="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             width='100%'
             placeholder="e.g., name@example.com"
           />
@@ -138,8 +126,8 @@ const GuardianForm = () => {
           <Input 
             label="Address"
             name="address"
-            value={formData.address}
-            onChange={handleChange}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             required
             width='100%'
           />
@@ -156,7 +144,7 @@ const GuardianForm = () => {
         </form>
       
       <div className='flex-1 flex items-start justify-center pt-16 order-1 lg:order-2'>
-        <img src={GuardianPic} alt="Guardian Information" className='w-60 lg:w-120 h-auto ' />
+        <img src={GuardianPic} alt="Guardian Information" className='w-60 lg:w-120 h-auto lg:fixed lg:top-30 lg:right-30' />
       </div>
       </div>
     </div>

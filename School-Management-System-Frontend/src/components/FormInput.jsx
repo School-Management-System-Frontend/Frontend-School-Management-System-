@@ -61,6 +61,15 @@ const StyledWrapper = styled.div`
     border-bottom-color: blue;
     color: black;
   }
+  
+  .form-control input::placeholder{
+    color: #d4d4d4d0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .form-control input:focus::placeholder{
+    opacity: 1;
+  }
 
   .form-control label {
     position: absolute;

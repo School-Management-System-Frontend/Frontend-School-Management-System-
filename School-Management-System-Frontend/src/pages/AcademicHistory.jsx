@@ -108,7 +108,7 @@ const AcademicHistory = () => {
         </form>
 
         <div className="flex-1 flex items-start justify-center pt-16 order-1 lg:order-2">
-          <img src={AcademicPic} alt="Academic Illustration" className="w-60 lg:w-120 h-auto" />
+          <img src={AcademicPic} alt="Academic Illustration" className="w-60 lg:w-100 h-auto lg:fixed lg:top-20 lg:right-30" />
         </div>
       </div>
     </div>
