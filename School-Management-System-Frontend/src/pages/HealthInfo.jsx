@@ -27,11 +27,11 @@ const HealthInfo = () => {
 
   return (
     <div>
-      <p className="text-4xl font-bold text-center mt-4">Health Information</p>
-      <div className="flex">
+      <p className="text-4xl font-bold text-center mt-4 text-blue-600">Health Information</p>
+      <div className="grid grid-cols-1 lg:grid-cols-[650px_auto]">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-2 mt-4 mb-6 pl-42"
+          className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1"
         >
           <span className="flex flex-col gap-3">
             <p className="font-bold text-lg text-blue-700">Blood Group</p>
@@ -85,7 +85,7 @@ const HealthInfo = () => {
             <textarea
               value={allergies}
               onChange={(e) => setAllergies(e.target.value)}
-              className="w-92 h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black placeholder-gray-400 
+              className="w-full h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black placeholder-gray-400 
               focus:outline-none focus:ring-0 focus:border-b-2 focus:border-blue-700 shadow-lg transition duration-150 ease-in-out"
             />
           </span>
@@ -97,7 +97,7 @@ const HealthInfo = () => {
             <textarea
               value={conditions}
               onChange={(e) => setConditions(e.target.value)}
-              className="w-92 h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black placeholder-gray-400 
+              className="w-full h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black placeholder-gray-400 
               focus:outline-none focus:ring-0 focus:border-b-2 focus:border-blue-700 shadow-lg transition duration-150 ease-in-out"
             />
           </span>
@@ -105,10 +105,10 @@ const HealthInfo = () => {
           <Input
             label="Doctor's Contact"
             type="tel"
-            placeholder="000 000 0000"
+            placeholder="e.g., 0242345678"
             value={tel}
             onChange={(e) => setTel(e.target.value)}
-            width="350px"
+            width="100%"
           />
 
           <span className="flex">
@@ -122,11 +122,11 @@ const HealthInfo = () => {
           </span>
         </form>
 
-        <div className="pl-32">
+        <div className="flex-1 flex items-start justify-center pt-16 order-1 lg:order-2">
           <img
             src={HealthPic}
             alt="Health Illustration"
-            className="w-100 h-100 fixed top-30 right-40"
+            className="w-60 lg:w-120 h-auto"
           />
         </div>
       </div>

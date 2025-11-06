@@ -61,19 +61,20 @@ const Review = () => {
   );
 
   const InfoItem = ({ label, value }) => (
-    <div className="mb-2">
-      <span className="font-semibold">{label}:</span>
-      <span className="ml-2">{value}</span>
+    <div className="mb-3 p-2 bg-gray-50 rounded">
+      <span className="font-semibold text-blue-700">{label}:</span>
+      <span className="ml-2 text-gray-700">{value}</span>
     </div>
   );
 
   const Section = ({ title, data, editPath }) => (
-    <div className="mb-6 p-4 border-b-2 border-black rounded-md">
+    <div className="mb-6 p-6 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <SectionTitle title={title} />
         <button
           onClick={() => navigate(editPath)}
-          className="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 hover:scale-105 transition duration-150 ease-in-out cursor-pointer"
+          className="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 
+            hover:scale-105 transition duration-150 ease-in-out cursor-pointer text-sm"
         >
           Edit
         </button>
@@ -103,10 +104,18 @@ const Review = () => {
   );
 
   return (
-    <div className="">
-          <p className="text-4xl font-bold mb-6 text-center">Review Information</p>
-      <div className="flex-1">
-        <form className="flex flex-col gap-2 mt-4 mb-6 pl-42 w-180">
+    <div className="container mx-auto px-4">
+      <p className="text-4xl font-bold text-blue-600 text-center mt-4 mb-6">Review Information</p>
+      <div className="flex flex-col lg:flex-row">
+        <div className="block lg:hidden w-full flex justify-center mb-6">
+          <img 
+            src={ReviewPic} 
+            alt="Review" 
+            className="w-60 h-auto" 
+          />
+        </div>
+        <div className="w-full lg:w-[700px] lg:pl-26">
+          <form className="flex flex-col gap-4 max-w-4xl mx-auto">
           
           <Section 
             title="Personal Information" 
@@ -137,20 +146,25 @@ const Review = () => {
             editPath="/documents"
           />
 
-          <span className="flex">
+          <span className="mt-0 mb-6 flex">
             <button
               type="submit"
               className="w-full mt-4 bg-blue-700 text-white font-bold cursor-pointer py-2 px-4 rounded-md 
-              hover:bg-blue-800 transition duration-150 ease-in-out"
+                hover:bg-blue-800 transition duration-150 ease-in-out"
             >
-              Submit
+              Submit Application
             </button>
           </span>
-        </form>
-      </div>
-      
-      <div className="flex-1 flex items-start justify-center pt-16">
-        <img src={ReviewPic} alt="Review" className="w-96 h-auto fixed top-30 right-35" />
+          </form>
+        </div>
+        
+        <div className="hidden lg:block lg:w-1/3 flex justify-center items-start pl-12">
+          <img 
+            src={ReviewPic} 
+            alt="Review" 
+            className="w-60 lg:w-80 h-auto fixed top-40 right-40" 
+          />
+        </div>
       </div>
     </div>
   );

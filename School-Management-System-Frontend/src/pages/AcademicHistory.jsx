@@ -26,21 +26,21 @@ const AcademicHistory = () => {
 
   return (
     <div className="">
-      <p className="text-4xl font-bold text-center mt-4">Academic History</p>
-      <div className="flex">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 pl-42">
+      <p className="text-4xl font-bold text-center mt-4 text-blue-600">Academic History</p>
+      <div className="grid grid-cols-1 lg:grid-cols-[650px_auto]">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1">
           <Input 
             label="Last School Attended" 
             value={schoolAttended} 
             onChange={(e) => setSchoolAttended(e.target.value)} 
-            width="400px" 
+            width="100%" 
           />
           <Input 
             label="Address" 
             type="text" 
             value={address} 
             onChange={(e) => setAddress(e.target.value)} 
-            width="400px"
+            width="100%"
           />
 
           <span className="">
@@ -91,7 +91,7 @@ const AcademicHistory = () => {
           <span className="mt-2">
             <p className="font-bold text-lg text-blue-700">Reason for Leaving (Optional)</p>
             <textarea
-              className="w-100 h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black 
+              className="w-full h-24 p-3 rounded-md border-b-2 border-black bg-transparent text-black 
               focus:outline-none focus:ring-0 focus:border-blue-700 shadow-lg transition duration-150 ease-in-out"
             />
           </span>
@@ -107,8 +107,8 @@ const AcademicHistory = () => {
           </span>
         </form>
 
-        <div className="pl-32">
-          <img src={AcademicPic} alt="Academic Illustration" className="w-100 h-100 fixed top-30 right-40" />
+        <div className="flex-1 flex items-start justify-center pt-16 order-1 lg:order-2">
+          <img src={AcademicPic} alt="Academic Illustration" className="w-60 lg:w-120 h-auto" />
         </div>
       </div>
     </div>

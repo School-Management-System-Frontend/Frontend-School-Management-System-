@@ -95,11 +95,11 @@ const DocumentsUpload = () => {
 
   return (
     <div className="">
-      <p className="text-4xl font-bold text-center mt-4">Required Documents</p>
-      <div className="flex ">
+      <p className="text-4xl font-bold text-center mt-4 text-blue-600">Required Documents</p>
+      <div className="grid grid-cols-1 lg:grid-cols-[650px_auto]">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 mt-4 mb-6 pl-60"
+          className="flex flex-col gap-4 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1"
         >
           {Object.entries(fileConfigs).map(([fieldName, config]) => (
             <div key={fieldName} className="mb-4">
@@ -125,7 +125,7 @@ const DocumentsUpload = () => {
                 accept={config.accept}
                 onChange={(e) => handleFileChange(e, fieldName)}
                 required={config.required}
-                className="w-72 p-3 rounded-md border-b-2 border-black bg-transparent 
+                className="w-full p-3 rounded-md border-b-2 border-black bg-transparent 
                   text-black placeholder-gray-400 focus:outline-none focus:ring-0 
                   focus:border-b-2 focus:border-blue-700 shadow-sm"
               />
@@ -145,11 +145,11 @@ const DocumentsUpload = () => {
           </span>
         </form>
 
-        <div className="pl-32">
+        <div className="flex-1 flex items-start justify-center pt-16 order-1 lg:order-2">
           <img
             src={DocumentPic}
             alt="Documents Illustration"
-            className="w-90 h-92 fixed top-30 right-40"
+            className="w-40 lg:w-70 h-auto"
           />
         </div>
       </div>
