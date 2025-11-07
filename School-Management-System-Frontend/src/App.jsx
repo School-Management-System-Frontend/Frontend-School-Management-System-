@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
+import { FormProvider } from './context/FormContext'
 import Home from './pages/Home'
 import Login from './pages/login'
 import AcademicHistory from './pages/AcademicHistory'
@@ -11,7 +12,8 @@ import Review from './pages/Review'
 
 function App() {
   return (
-    <Router>
+    <FormProvider>
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -19,10 +21,11 @@ function App() {
           <Route path="/academic" element={<AcademicHistory />} />
           <Route path="/health" element={<HealthInfo />} />
           <Route path="/documents" element={<DocumentsUpload />} />
-           <Route path="/guardian" element={<GuardianForm />} />
-           <Route path="/review" element={<Review />} />
+          <Route path="/guardian" element={<GuardianForm />} />
+          <Route path="/review" element={<Review />} />
         </Routes>
-    </Router>
+      </Router>
+    </FormProvider>
   )
 }
 

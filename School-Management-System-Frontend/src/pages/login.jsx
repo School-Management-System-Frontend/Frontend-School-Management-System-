@@ -19,9 +19,9 @@ export default function Login(){
     navigate("/personal");
   };
     return(
-        <div className="bg-[url('/background1.png')] bg-center min-h-screen flex items-center justify-center">
+        <div className="bg-[url('/background1.png')] bg-center  lg: min-h-screen flex items-center justify-center">
 
-    <div className="w-170 max-w-md mx-auto shadow-2xl rounded-lg overflow-hidden bg-black/80 shadow-white">
+    <div className="w-170 max-w-md mx-auto shadow-2xl rounded-lg overflow-hidden bg-black/80 shadow-white border-t-6 border-blue-600 ">
         
         <div className="p-8 space-y-6 text-white">
             <h2 className="text-2xl font-bold text-center mb-6 ">Sign in to your account</h2>
@@ -29,11 +29,11 @@ export default function Login(){
             <form onSubmit={handleSubmit}  className="space-y-6">
                 
                 <div>
-                    <label for="email" className="text-md font-medium block mb-2 text-white">Serial Number </label>
+                    <label htmlFor="number" className="text-md font-medium block mb-2 text-white">Serial Number </label>
                     <input 
-                        type="text" 
-                        name="text" 
-                        id="text" 
+                        type="number" 
+                        name="number" 
+                        id="number" 
                         value={serialNumber}
                         onChange={(e) => {setSerialNumber(e.target.value)}}
                         placeholder="Enter your serial number" 
@@ -43,7 +43,7 @@ export default function Login(){
                 </div>
 
                 <div>
-                    <label for="password" className="text-md font-medium block mb-2 text-white">Pin</label>
+                    <label htmlFor="password" className="text-md font-medium block mb-2 text-white">Pin</label>
                     <input 
 
                         type="password" 
@@ -52,22 +52,9 @@ export default function Login(){
                         value={pin}
                         onChange={(e) => {setPin(e.target.value)}}
                         placeholder="Enter your pin" 
-                        class="w-full p-3 rounded-md border-2 border-blue-500 bg-transparent text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-150 ease-in-out"
+                        className="w-full p-3 rounded-md border-2 border-blue-500 bg-transparent text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-150 ease-in-out"
                         required
                     />
-                </div>
-
-                <div className="flex items-center justify-between text-sm">
-                    {/* <div className="flex items-center">
-                        <input 
-                            id="remember-me" 
-                            name="remember-me" 
-                            type="checkbox" 
-                            className="h-4 w-4 text-blue-600 bg-gray-700 border-gray-700 rounded focus:ring-blue-500"
-                        />
-                        <label for="remember-me" className="ml-2 block text-gray-900">Remember me</label>
-                    </div> */}
-                  
                 </div>
 
                 <button 

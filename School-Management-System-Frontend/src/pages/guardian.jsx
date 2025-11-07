@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormContext } from '../context/FormContext';
 import Input from '../components/FormInput.jsx';
 import GuardianPic from '../assets/guardian.png';
 
 const GuardianForm = () => {
-    const [fullName, setFullName] = useState('');
-    const [relationship, setRelationship] = useState('');
-    const [occupation, setOccupation] = useState('');
-    const [emergencyNumber, setEmergencyNumber] = useState('');
-    const [address, setAddress] = useState('');
-    const [phoneNumber, setphoneNumber] = useState('');
-    const [email, setEmail] = useState('');
+  const { formData, updateFormData } = useFormContext();
+  const [fullName, setFullName] = useState('');
+  const [relationship, setRelationship] = useState('');
+  const [occupation, setOccupation] = useState('');
+  const [emergencyNumber, setEmergencyNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (formData.guardian && Object.keys(formData.guardian).length) {
+      const g = formData.guardian;
+      setFullName(g.fullName || '');
+      setRelationship(g.relationship || '');
+      setOccupation(g.occupation || '');
+      setEmergencyNumber(g.emergencyNumber || '');
+      setAddress(g.address || '');
+      setphoneNumber(g.phoneNumber || '');
+      setEmail(g.email || '');
+    }
+  }, [formData.guardian]);
 
   const navigate = useNavigate();
 
@@ -18,14 +33,13 @@ const GuardianForm = () => {
     e.preventDefault();
 
     // Simple validation for required fields
-     if (!fullName || !relationship || !occupation|| !emergencyNumber || !address || !phoneNumber || !email) {
+     if (!fullName || !relationship || !occupation|| !emergencyNumber || !address || !phoneNumber) {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate email format (optional: only if provided)
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert("Please enter a valid email address.");
       return;
     }
@@ -38,12 +52,28 @@ const GuardianForm = () => {
     }
     const phoneEmergencyRegex = /^[0-9]{10}$/;
     if (!phoneEmergencyRegex.test(emergencyNumber)) {
-      alert("Please enter a valid 10-digit phone number.");
+      alert("Please enter a valid 10-digit emergency phone number.");
       return;
     }
 
-    console.log('Form submitted✅👍');
-    // Navigate to the next page (e.g., academic history)
+    // Emergency number should not be the same as phone number
+    if (phoneNumber === emergencyNumber) {
+      alert("Emergency number must be different from phone number.");
+      return;
+    }
+
+    // Save to context
+    updateFormData('guardian', {
+      fullName,
+      relationship,
+      occupation,
+      emergencyNumber,
+      address,
+      phoneNumber,
+      email,
+    });
+
+    console.log('Guardian information saved✅👍');
     navigate('/academic');
   };
 
@@ -116,11 +146,13 @@ const GuardianForm = () => {
           <Input 
             label="Email Address (Optional)"
             name="email"
-            type="email"
-            value={email}
+            type="text"
+            id='email'
+            value={email ?? ''}
             onChange={(e) => setEmail(e.target.value)}
             width='100%'
             placeholder="e.g., name@example.com"
+            required={false}
           />
           
           <Input 

@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormContext } from '../context/FormContext';
 import Input from '../components/FormInput.jsx';
 import AcademicPic from '../assets/Academic.png';
 
 const AcademicHistory = () => {
+  const { formData, updateFormData } = useFormContext();
   const [schoolAttended, setSchoolAttended] = useState("");
   const [address, setAddress] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [classCompleted, setClassCompleted] = useState("");
+
+  useEffect(() => {
+    if (formData.academic && Object.keys(formData.academic).length) {
+      const a = formData.academic;
+      setSchoolAttended(a.schoolAttended || a.lastSchool || "");
+      setAddress(a.address || a.schoolAddress || "");
+      setFromDate(a.fromDate || a.yearsAttended?.from || "");
+      setToDate(a.toDate || a.yearsAttended?.to || "");
+      setClassCompleted(a.classCompleted || "");
+    }
+  }, [formData.academic]);
 
   const navigate = useNavigate();
 
@@ -21,6 +34,27 @@ const AcademicHistory = () => {
       return;
     }
 
+    // Validate chronology: From must be earlier than To
+    const from = new Date(fromDate);
+    const to = new Date(toDate);
+    if (!(from instanceof Date && !isNaN(from)) || !(to instanceof Date && !isNaN(to))) {
+      alert("Please enter valid dates.");
+      return;
+    }
+    if (from >= to) {
+      alert("'From' date must be earlier than 'To' date.");
+      return;
+    }
+
+    // Save to context
+    updateFormData('academic', {
+      schoolAttended,
+      address,
+      fromDate,
+      toDate,
+      classCompleted,
+    });
+
     navigate("/health");
   };
 
@@ -28,17 +62,17 @@ const AcademicHistory = () => {
     <div className="">
       <p className="text-4xl font-bold text-center mt-4 text-blue-600">Academic History</p>
       <div className="grid grid-cols-1 lg:grid-cols-[650px_auto]">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1">
+        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1">
           <Input 
             label="Last School Attended" 
-            value={schoolAttended} 
+            value={schoolAttended ?? ''} 
             onChange={(e) => setSchoolAttended(e.target.value)} 
             width="100%" 
           />
           <Input 
             label="Address" 
             type="text" 
-            value={address} 
+            value={address ?? ''} 
             onChange={(e) => setAddress(e.target.value)} 
             width="100%"
           />
@@ -51,7 +85,7 @@ const AcademicHistory = () => {
                   label="From" 
                   type="date" 
                   width="150px" 
-                  value={fromDate}
+                  value={fromDate ?? ''}
                   onChange={(e) => setFromDate(e.target.value)} 
                 />
               </span>
@@ -60,7 +94,7 @@ const AcademicHistory = () => {
                   label="To" 
                   type="date" 
                   width="150px"
-                  value={toDate}
+                  value={toDate ?? ''}
                   onChange={(e) => setToDate(e.target.value)} 
                 />
               </span>
@@ -70,7 +104,7 @@ const AcademicHistory = () => {
           <span className="flex flex-col gap-3">
             <p className="font-bold text-lg text-blue-700">Class Completed</p>
             <select
-              value={classCompleted}
+              value={classCompleted ?? ''}
               onChange={(e) => setClassCompleted(e.target.value)}
               className="w-72 p-3 rounded-md border-b-2 border-black bg-transparent text-black 
               focus:outline-none focus:ring-0 focus:border-blue-700 shadow-sm transition duration-150 ease-in-out"

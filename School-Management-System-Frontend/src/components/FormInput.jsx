@@ -7,7 +7,10 @@ const Input = ({
   value, 
   onChange, 
   placeholder,
-  width = "190px"
+  width = "190px",
+  required = false,
+  name,
+  ...rest
 }) => {
     const handleChange = (e) => {
     let val = e.target.value;
@@ -25,8 +28,19 @@ const Input = ({
   return (
     <StyledWrapper width={width}>
       <div className="form-control">
-        <input type={type} required value={value} onChange={handleChange} placeholder={placeholder || ''} inputMode={type === "tel" ? "numeric" : "text"}
-          maxLength={type === "tel" ? 10 : undefined} minLength={type === "tel" ? 10 : undefined} pattern={type === "tel" ? "\\d{10}" : undefined} />
+        <input 
+          type={type} 
+          name={name}
+          required={required || type === 'tel' ? true : undefined}
+          value={value ?? ''}
+          onChange={handleChange}
+          placeholder={placeholder || ''}
+          inputMode={type === "tel" ? "numeric" : undefined}
+          maxLength={type === "tel" ? 10 : undefined}
+          minLength={type === "tel" ? 10 : undefined}
+          pattern={type === "tel" ? "\\d{10}" : undefined}
+          {...rest}
+        />
         <label>
           {label.split("").map((letter, index) => (
             <span key={index} style={{ transitionDelay: `${index * 50}ms` }}>{letter}</span>

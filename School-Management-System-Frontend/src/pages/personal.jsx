@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormContext } from '../context/FormContext';
 import Input from '../components/FormInput.jsx';
 import PersonalPic from '../assets/personal.png';
 
 const Personal = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [gender, setGender] = useState('');
-  const [dateOfBirth, setdateOfBirth] = useState('');
-  const [nationality, setNationality] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
-  const [email, setEmail] = useState('');
+  const { formData, updateFormData } = useFormContext();
+  const [personalData, setPersonalData] = useState({
+    firstName: '',
+    lastName: '',
+    middleName: '',
+    gender: '',
+    dateOfBirth: '',
+    nationality: '',
+    address: '',
+    phoneNumber: '',
+    email: ''
+  });
+
+  // Load saved data if it exists
+  useEffect(() => {
+    if (formData.personal) {
+      setPersonalData(formData.personal);
+    }
+  }, [formData.personal]);
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple validation for required fields
-     if (!firstName || !lastName || !gender || !dateOfBirth || !nationality || !address || !phoneNumber || !email) {
+    // Simple validation for required fields (middle name is optional)
+    const { firstName, lastName, gender, dateOfBirth, nationality, address, phoneNumber, email } = personalData;
+    if (!firstName || !lastName || !gender || !dateOfBirth
+       || !nationality || !address || !phoneNumber || !email) {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
@@ -39,8 +52,10 @@ const Personal = () => {
       return;
     }
 
-    console.log('Form submitted✅👍');
-    // Navigate to the next page (e.g., academic history)
+    // Save to context
+    updateFormData('personal', personalData);
+    console.log('Personal information saved✅👍');
+    // Navigate to the next page
     navigate('/guardian');
   };
 
@@ -48,14 +63,14 @@ const Personal = () => {
     <div className=''>
           <p className='text-4xl font-bold text-blue-600 text-center mt-4'>Personal Information</p>
       <div className='grid grid-cols-1 lg:grid-cols-[650px_auto]'>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1'>
+        <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1'>
           
           {/* Required Fields */}
           <Input 
             label="First Name" 
             name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={personalData.firstName ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, firstName: e.target.value }))}
             required
             width='100%'
           />
@@ -63,8 +78,8 @@ const Personal = () => {
           <Input 
             label="Last Name"
             name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={personalData.lastName ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, lastName: e.target.value }))}
             required
             width='100%'
           />
@@ -73,8 +88,8 @@ const Personal = () => {
           <Input 
             label="Middle Name (Optional)"
             name="middleName"
-            value={middleName}
-            onChange={(e) => setMiddleName(e.target.value)}
+            value={personalData.middleName ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, middleName: e.target.value }))}
             width='100%'
           />
           
@@ -82,8 +97,8 @@ const Personal = () => {
             <p className='font-bold text-lg text-blue-700'>Gender</p>
             <select
               name="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
+              value={personalData.gender ?? ''}
+              onChange={(e) => setPersonalData(prev => ({ ...prev, gender: e.target.value }))}
               required
               className='w-72 p-3 rounded-md border-b-2 border-black bg-transparent 
                 text-black placeholder-gray-400 focus:outline-none focus:ring-0 
@@ -99,8 +114,8 @@ const Personal = () => {
             label="Date of Birth"
             name="dateOfBirth"
             type="date"
-            value={dateOfBirth}
-            onChange={(e) => setdateOfBirth(e.target.value)}
+            value={personalData.dateOfBirth ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, dateOfBirth: e.target.value }))}
             required
             width='100%'
           />
@@ -108,8 +123,8 @@ const Personal = () => {
           <Input 
             label="Nationality"
             name="nationality"
-            value={nationality}
-            onChange={(e) => setNationality(e.target.value)}
+            value={personalData.nationality ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, nationality: e.target.value }))}
             required
             width='100%'
           />
@@ -117,8 +132,8 @@ const Personal = () => {
           <Input 
             label="Address"
             name="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={personalData.address ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, address: e.target.value }))}
             required
             width='100%'
           />
@@ -127,8 +142,8 @@ const Personal = () => {
             label="Phone Number"
             name="phoneNumber"
             type="tel"
-            value={phoneNumber}
-            onChange={(e) => setphoneNumber(e.target.value)}
+            value={personalData.phoneNumber ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, phoneNumber: e.target.value }))}
             required
             width='100%'
             placeholder="e.g., 0242345678"
@@ -138,8 +153,8 @@ const Personal = () => {
             label="Email Address"
             name="emailAddress"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={personalData.email ?? ''}
+            onChange={(e) => setPersonalData(prev => ({ ...prev, email: e.target.value }))}
             required
             width='100%'
             placeholder="e.g., name@example.com"

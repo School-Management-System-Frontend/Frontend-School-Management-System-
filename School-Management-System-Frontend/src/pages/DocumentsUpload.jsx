@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormContext } from '../context/FormContext';
 import DocumentPic from "../assets/document.png";
 
 const DocumentsUpload = () => {
+  const { formData, updateFormData } = useFormContext();
   const [documents, setDocuments] = useState({
     passportPhoto: null,
     birthCertificate: null,
@@ -16,6 +18,21 @@ const DocumentsUpload = () => {
     testimonial: null,
     medicalReport: null,
   });
+
+  useEffect(() => {
+    if (formData.documents) {
+      setDocuments(formData.documents);
+      // Build previews: for images we might not have persisted URLs, so regenerate for File instances
+      const nextPreviews = Object.fromEntries(
+        Object.entries(formData.documents).map(([k, v]) => {
+          if (v instanceof File && v.type?.startsWith('image/')) return [k, URL.createObjectURL(v)];
+          if (typeof v === 'string') return [k, v];
+          return [k, null];
+        })
+      );
+      setPreviews(nextPreviews);
+    }
+  }, [formData.documents]);
 
   const navigate = useNavigate();
 
@@ -67,7 +84,12 @@ const DocumentsUpload = () => {
       ? "/pdf-icon.png"
       : "/file-icon.png";
 
-    setDocuments((prev) => ({ ...prev, [fieldName]: file }));
+    setDocuments((prev) => {
+      const next = { ...prev, [fieldName]: file };
+      // persist to context immediately so Review can read it
+      updateFormData('documents', next);
+      return next;
+    });
     setPreviews((prev) => ({ ...prev, [fieldName]: previewURL }));
   };
 
@@ -87,7 +109,9 @@ const DocumentsUpload = () => {
       return;
     }
 
-    // Simulate successful upload 
+    // Persist in context
+    updateFormData('documents', documents);
+
     alert("Documents uploaded successfully!");
 
     navigate("/review");
