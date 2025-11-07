@@ -62,19 +62,22 @@ const AcademicHistory = () => {
     <div className="">
       <p className="text-4xl font-bold text-center mt-4 text-blue-600">Academic History</p>
       <div className="grid grid-cols-1 lg:grid-cols-[650px_auto]">
-        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1">
+        <form  onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1">
           <Input 
             label="Last School Attended" 
+            type='text'
             value={schoolAttended ?? ''} 
             onChange={(e) => setSchoolAttended(e.target.value)} 
             width="100%" 
+            required={true}
           />
           <Input 
             label="Address" 
             type="text" 
-            value={address ?? ''} 
+            value={address} 
             onChange={(e) => setAddress(e.target.value)} 
             width="100%"
+            required={true}
           />
 
           <span className="">
@@ -85,7 +88,7 @@ const AcademicHistory = () => {
                   label="From" 
                   type="date" 
                   width="150px" 
-                  value={fromDate ?? ''}
+                  value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)} 
                 />
               </span>
@@ -94,7 +97,7 @@ const AcademicHistory = () => {
                   label="To" 
                   type="date" 
                   width="150px"
-                  value={toDate ?? ''}
+                  value={toDate}
                   onChange={(e) => setToDate(e.target.value)} 
                 />
               </span>
