@@ -19,7 +19,7 @@ export default function Login(){
     navigate("/personal");
   };
     return(
-        <div className="bg-[url('/background1.png')] min-h-screen flex items-center justify-center">
+        <div className="bg-[url('/background1.png')] bg-center min-h-screen flex items-center justify-center">
 
     <div className="w-170 max-w-md mx-auto shadow-2xl rounded-lg overflow-hidden bg-black/80 shadow-white">
         
