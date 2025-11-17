@@ -4,7 +4,7 @@ import { useFormContext } from '../context/FormContext';
 import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
-import HealthPic from '../assets/health.png';
+import HealthPic from '../assets/Health.png';
 
 const HealthInfo = () => {
   const { formData, updateFormData } = useFormContext();

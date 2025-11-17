@@ -4,7 +4,7 @@ import { useFormContext } from '../context/FormContext';
 import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
-import AcademicPic from '../assets/academic.png';
+import AcademicPic from '../assets/Academic.png';
 
 const Academic = () => {
   const { formData, updateFormData } = useFormContext();
