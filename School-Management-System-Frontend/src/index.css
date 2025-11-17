@@ -15,6 +15,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Slide in animation for navbar */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .animate-slide-in {
+    animation: slideInLeft 0.3s ease-in-out;
+  }
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -49,12 +67,20 @@ h1 {
 } */
 button:hover {
   border-color: #646cff;
+  /* border-color: #e6a7e0; */
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #a3a2a2;
+  /* opacity: 1; */
+}
+input[type="date"]::-webkit-datetime-edit {
+  color: #747373;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

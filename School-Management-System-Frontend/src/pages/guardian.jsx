@@ -1,186 +1,387 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
-import Input from '../components/FormInput.jsx';
+import Header from '../components/header.jsx';
+import NavBar from '../components/navBar.jsx';
+import Status from '../components/status.jsx';
 import GuardianPic from '../assets/guardian.png';
 
-const GuardianForm = () => {
+const Guardian = () => {
   const { formData, updateFormData } = useFormContext();
-  const [fullName, setFullName] = useState('');
-  const [relationship, setRelationship] = useState('');
-  const [occupation, setOccupation] = useState('');
-  const [emergencyNumber, setEmergencyNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
-  const [email, setEmail] = useState('');
+  const [open, setOpen] = useState(false);
+  const navRef = useRef(null);
+  const menuRef = useRef(null);
+  const [guardianData, setGuardianData] = useState({
+    fullName: '',
+    relationship: '',
+    occupation: '',
+    nationality: '',
+    phoneNumber: '',
+    emergencyNumber: '',
+    email: '',
+    address: '',
+  });
+  
+  const [statusModal, setStatusModal] = useState({
+    isOpen: false,
+    isSuccess: false,
+    title: '',
+    message: '',
+    missingFields: []
+  });
 
+  // Load saved data if it exists
   useEffect(() => {
-    if (formData.guardian && Object.keys(formData.guardian).length) {
-      const g = formData.guardian;
-      setFullName(g.fullName || '');
-      setRelationship(g.relationship || '');
-      setOccupation(g.occupation || '');
-      setEmergencyNumber(g.emergencyNumber || '');
-      setAddress(g.address || '');
-      setphoneNumber(g.phoneNumber || '');
-      setEmail(g.email || '');
+    if (formData.guardian) {
+      setGuardianData(formData.guardian);
     }
   }, [formData.guardian]);
 
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (!open) return;
+
+      if (menuRef.current && menuRef.current.contains(e.target)) return;
+
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Restrict phone number and emergency number to 10 digits only
+    if (name === 'phoneNumber' || name === 'emergencyNumber') {
+      const numericValue = value.replace(/\D/g, ''); // Remove non-digits
+      if (numericValue.length <= 10) {
+        setGuardianData((prev) => ({ ...prev, [name]: numericValue }));
+      }
+      return;
+    }
+    
+    setGuardianData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple validation for required fields
-     if (!fullName || !relationship || !occupation|| !emergencyNumber || !address || !phoneNumber) {
-      alert("Please fill in all required fields before proceeding.");
+    const missingFields = [];
+
+    // Check for required fields
+    if (!guardianData.fullName) missingFields.push('Full Name');
+    if (!guardianData.relationship) missingFields.push('Relationship To Applicant');
+    if (!guardianData.occupation) missingFields.push('Occupation');
+    if (!guardianData.nationality) missingFields.push('Nationality');
+    if (!guardianData.phoneNumber) missingFields.push('Phone Number');
+    if (!guardianData.emergencyNumber) missingFields.push('Emergency Line');
+    if (!guardianData.address) missingFields.push('Address');
+
+    if (missingFields.length > 0) {
+      setStatusModal({
+        isOpen: true,
+        isSuccess: false,
+        title: 'Application Incomplete',
+        message: 'Please provide your data for all required fields',
+        missingFields
+      });
       return;
     }
 
-    // Validate email format (optional: only if provided)
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
+    // Validate email format if provided
+    if (guardianData.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(guardianData.email)) {
+        setStatusModal({
+          isOpen: true,
+          isSuccess: false,
+          title: 'Invalid Email',
+          message: 'Please enter a valid email address',
+          missingFields: ['Email']
+        });
+        return;
+      }
     }
 
-    // Validate phone number (assumes Nigerian format)
+    // Validate phone numbers
     const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    const phoneEmergencyRegex = /^[0-9]{10}$/;
-    if (!phoneEmergencyRegex.test(emergencyNumber)) {
-      alert("Please enter a valid 10-digit emergency phone number.");
+    if (!phoneRegex.test(guardianData.phoneNumber)) {
+      setStatusModal({
+        isOpen: true,
+        isSuccess: false,
+        title: 'Invalid Phone Number',
+        message: 'Please enter a valid 10-digit phone number',
+        missingFields: ['Phone Number']
+      });
       return;
     }
 
-    // Emergency number should not be the same as phone number
-    if (phoneNumber === emergencyNumber) {
-      alert("Emergency number must be different from phone number.");
+    if (!phoneRegex.test(guardianData.emergencyNumber)) {
+      setStatusModal({
+        isOpen: true,
+        isSuccess: false,
+        title: 'Invalid Emergency Number',
+        message: 'Please enter a valid 10-digit emergency number',
+        missingFields: ['Emergency Line']
+      });
+      return;
+    }
+
+    // Validate that phone number and emergency number are different
+    if (guardianData.phoneNumber === guardianData.emergencyNumber) {
+      setStatusModal({
+        isOpen: true,
+        isSuccess: false,
+        title: 'Duplicate Phone Numbers',
+        message: 'Phone number and emergency number must be different',
+        missingFields: ['Phone Number', 'Emergency Line']
+      });
       return;
     }
 
     // Save to context
-    updateFormData('guardian', {
-      fullName,
-      relationship,
-      occupation,
-      emergencyNumber,
-      address,
-      phoneNumber,
-      email,
+    updateFormData('guardian', guardianData);
+    
+    // Show success modal
+    setStatusModal({
+      isOpen: true,
+      isSuccess: true,
+      title: 'Application Submitted Successfully',
+      message: 'Your Guardian information has been saved and submitted for review',
+      missingFields: []
     });
 
-    console.log('Guardian information saved✅👍');
-    navigate('/academic');
+    // Navigate after 2 seconds
+    setTimeout(() => {
+      setStatusModal({ ...statusModal, isOpen: false });
+      navigate('/academic');
+    }, 2000);
   };
 
+  const handleCloseModal = () => {
+    setStatusModal({ ...statusModal, isOpen: false });
+  };
 
   return (
-    <div className=''>
-          <p className='text-4xl font-bold text-center mt-4 text-blue-600 p-1'>Guardian Information</p>
-      <div className='grid grid-cols-1 lg:grid-cols-[650px_auto]'>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-2 mt-4 mb-6 p-6 lg:pl-42 order-2 lg:order-1'>
-          
-          <Input 
-            label="Full Name"
-            name="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            width='100%'
-          />
-          
-          <span className='flex flex-col gap-2'>
-            <p className='font-bold text-lg text-blue-700'>Relationship to Applicant</p>
-            <select
-              name="relationship"
-              value={relationship}
-              onChange={(e) => setRelationship(e.target.value)}
-              required
-              className='w-72 p-3 rounded-md border-b-2 border-black bg-transparent 
-                text-black placeholder-gray-400 focus:outline-none focus:ring-0 
-                focus:border-b-2 focus:border-blue-700 shadow-sm'
-            >
-              <option value="">Select Relationship</option>
-              <option value="Father">Father</option>
-              <option value="Mother">Mother</option>
-              <option value="Guardian">Guardian</option>
-              <option value="Other">Other</option>
-            </select>
-          </span>
-          
-          <Input 
-            label="Occupation"
-            name="occupation"
-            value={occupation}
-            onChange={(e) => setOccupation(e.target.value)}
-            required
-            width='100%'
-          />
-          
-          <Input 
-            label="Phone Number"
-            name="phoneNumber"
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setphoneNumber(e.target.value)}
-            required
-            width='100%'
-            placeholder="e.g., 0223456781"
-          />
-          
-          <Input 
-            label="Emergency Number"
-            name="emergencyNumber"
-            type="tel"
-            value={emergencyNumber}
-            onChange={(e) => setEmergencyNumber(e.target.value)}
-            required
-            width='100%'
-            placeholder="e.g., 0242345678"
-          />
-          
-          <Input 
-            label="Email Address (Optional)"
-            name="email"
-            type="text"
-            id='email'
-            value={email ?? ''}
-            onChange={(e) => setEmail(e.target.value)}
-            width='100%'
-            placeholder="e.g., name@example.com"
-            required={false}
-          />
-          
-          <Input 
-            label="Address"
-            name="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            width='100%'
-          />
-
-          <span className="mt-4">
-            <button
-              type="submit"
-              className="w-full mt-4 bg-blue-700 text-white font-bold cursor-pointer py-2 px-4 
-                rounded-md hover:bg-blue-800 transition duration-150 ease-in-out"
-            >
-              Next
-            </button>
-          </span>
-        </form>
-      
-      <div className='flex-1 flex items-start justify-center pt-16 order-1 lg:order-2'>
-        <img src={GuardianPic} alt="Guardian Information" className='w-60 lg:w-120 h-auto lg:fixed lg:top-30 lg:right-30' />
-      </div>
+    <div className='p-4'>
+      <Status 
+        isOpen={statusModal.isOpen}
+        isSuccess={statusModal.isSuccess}
+        title={statusModal.title}
+        message={statusModal.message}
+        missingFields={statusModal.missingFields}
+        onClose={handleCloseModal}
+      />
+      {/* page header */}
+      <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200'>
+          <Header open={open} setOpen={setOpen} menuRef={menuRef}/>
+          <div className='flex flex-col justify-center items-center gap-1 mr-4 fixed bottom-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
+            <span className='flex gap-1 items-center'>
+              <p className='text-[#0063FF] font-semibold'>Step 1</p>
+              <p className='text-[#D9D9D9]'>of 6</p>
+            </span>
+            <span className='flex items-center gap-2'>
+              <span class="bg-[#0063FF] w-11 h-3 rounded-full"></span>
+              <span class="bg-[#0063FF] w-11 h-3 rounded-full"></span>
+              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+            </span>
+          </div>
+          {open && (
+            <div className='fixed top-15 left-0' ref={navRef}>
+            <NavBar/>
+          </div>
+          )}
+         </div>
+      {/* page content */}
+      <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 mt-20 mb-10'>
+        {/* illustration display */}
+        <div className=''>
+          <div className='flex flex-col gap-2 w-full'>
+            <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start'>Guardian Information</span>
+            <span className='text-gray-500 text-center md:text-start'>Provide your guardian contact information</span>
+          </div>
+          <div className='flex justify-center w-full'>
+            <img 
+              src={GuardianPic} 
+              alt="Guardian Information Illustration" 
+              className="w-100 h-auto mt-8 ml-18" 
+            />
+          </div>
+        </div>
+        {/* form */}
+        <div className='w-full ml-3 md:ml-0'>
+          <span className='text-2xl font-bold'>Enter your guardian's details</span>
+          <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-4 mt-6'>
+            <div className='grid grid-cols-1 gap-5'>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Full Name</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder='Enter your Full Name'
+                  value={guardianData.fullName}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                />
+              </div>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Relationship To Applicant</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <select
+                  name="relationship"
+                  value={guardianData.relationship}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                >
+                  <option value="" disabled>Select your Relationship</option>
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className='grid grid-cols-1 gap-5'>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Occupation</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <input
+                  type="text"
+                  name="occupation"
+                  placeholder='Enter your Occupation'
+                  value={guardianData.occupation}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                />
+              </div>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Nationality</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <input
+                  type="text"
+                  name="nationality"
+                  placeholder="Enter your Country's Name"
+                  value={guardianData.nationality}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                />
+              </div>
+            </div>
+            <div className='grid grid-cols-2 gap-10'>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Phone Number</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  placeholder='Enter your Phone Number'
+                  value={guardianData.phoneNumber}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                />
+              </div>
+              <div>
+                {/* label */}
+                <div className='flex'>
+                  <span className='font-semibold'>Emergency Line</span>
+                  <span className='text-red-500'>*</span>
+                </div>
+                {/* input */}
+                <input
+                  type="tel"
+                  name="emergencyNumber"
+                  placeholder='Enter your Emergency Number'
+                  value={guardianData.emergencyNumber}
+                  onChange={handleChange}
+                  className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+                />
+              </div>
+            </div>
+            <div>
+              {/* label */}
+              <div className='flex'>
+                <span className='font-semibold'>Email</span>
+              </div>
+              {/* input */}
+              <input
+                type="email"
+                name="email"
+                placeholder='Enter your Email Address'
+                value={guardianData.email}
+                onChange={handleChange}
+                className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+              />
+            </div>
+            <div>
+              {/* label */}
+              <div className='flex'>
+                <span className='font-semibold'>Address</span>
+                <span className='text-red-500'>*</span>
+              </div>
+              {/* input */}
+              <input
+                type="text"
+                name="address"
+                placeholder='Enter your House Address'
+                value={guardianData.address}
+                onChange={handleChange}
+                className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
+              />
+            </div>
+            <div className='flex items-center justify-between mt-6 mb-10'>
+              <button 
+                type="button"
+                onClick={() => navigate('/personal')}
+                className='bg-white border-2 border-blue-600 text-[#002359] font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold active:scale-105'
+              >
+                <span className='font-bold'>&lt;</span>
+                <span>Previous</span>
+              </button>
+              <button 
+                type="submit"
+                className='bg-blue-700 text-white shadow-md shadow-blue-400 font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold active:scale-105'
+              >
+                <span>Continue</span>
+                <span className='font-bold'>&gt;</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default GuardianForm;
+export default Guardian;

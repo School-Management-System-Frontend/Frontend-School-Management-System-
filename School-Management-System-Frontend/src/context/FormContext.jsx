@@ -1,14 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
+// src/context/FormContext.js
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const FormContext = createContext();
-
-export const useFormContext = () => {
-  const context = useContext(FormContext);
-  if (!context) {
-    throw new Error('useFormContext must be used within a FormProvider');
-  }
-  return context;
-};
 
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState({
@@ -16,24 +9,41 @@ export const FormProvider = ({ children }) => {
     guardian: {},
     academic: {},
     health: {},
-    documents: {
-      passportPhoto: null,
-      birthCertificate: null,
-      testimonial: null,
-      medicalReport: null
-    }
+    documents: {},
   });
 
   const updateFormData = (section, data) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [section]: data
+      [section]: { ...prev[section], ...data },
     }));
   };
 
+  const clearFormData = () => {
+    setFormData({
+      personal: {},
+      guardian: {},
+      academic: {},
+      health: {},
+      documents: {},
+    });
+    localStorage.removeItem("formData");
+  };
+
+    useEffect(() => {
+  localStorage.setItem("formData", JSON.stringify(formData));
+}, [formData]);
+
+useEffect(() => {
+  const savedData = localStorage.getItem("formData");
+  if (savedData) setFormData(JSON.parse(savedData));
+}, []);
+
   return (
-    <FormContext.Provider value={{ formData, updateFormData }}>
+    <FormContext.Provider value={{ formData, updateFormData, clearFormData }}>
       {children}
     </FormContext.Provider>
   );
 };
+
+export const useFormContext = () => useContext(FormContext);
