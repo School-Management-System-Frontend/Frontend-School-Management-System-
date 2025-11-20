@@ -5,12 +5,15 @@ import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
 import GuardianPic from '../assets/guardian.png';
+import updateIcon from '../assets/update.png';
 
 const Guardian = () => {
   const { formData, updateFormData } = useFormContext();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const navRef = useRef(null);
   const menuRef = useRef(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [guardianData, setGuardianData] = useState({
     fullName: '',
     relationship: '',
@@ -35,6 +38,12 @@ const Guardian = () => {
     if (formData.guardian) {
       setGuardianData(formData.guardian);
     }
+    
+    // Check if user came from Review page (edit mode) - persisted in sessionStorage
+    const isEditingMode = sessionStorage.getItem('isEditing') === 'true';
+    if (isEditingMode) {
+      setIsEditing(true);
+    }
   }, [formData.guardian]);
 
   // Close on outside click
@@ -52,8 +61,6 @@ const Guardian = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -153,7 +160,7 @@ const Guardian = () => {
     setStatusModal({
       isOpen: true,
       isSuccess: true,
-      title: 'Application Submitted Successfully',
+      title: isEditing ? 'Changes Saved Successfully' : 'Application Submitted Successfully',
       message: 'Your Guardian information has been saved and submitted for review',
       missingFields: []
     });
@@ -161,7 +168,13 @@ const Guardian = () => {
     // Navigate after 2 seconds
     setTimeout(() => {
       setStatusModal({ ...statusModal, isOpen: false });
-      navigate('/academic');
+      // Clear the editing flag from sessionStorage
+      sessionStorage.removeItem('isEditing');
+      if (isEditing) {
+        navigate('/review');
+      } else {
+        navigate('/academic');
+      }
     }, 2000);
   };
 
@@ -180,21 +193,21 @@ const Guardian = () => {
         onClose={handleCloseModal}
       />
       {/* page header */}
-      <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200'>
+      <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200 z-50'>
           <Header open={open} setOpen={setOpen} menuRef={menuRef}/>
-          <div className='flex flex-col justify-center items-center gap-1 mr-4 fixed bottom-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
+          <div className='flex flex-col justify-center items-center md:items-start gap-1 fixed bottom-0 left-0 right-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
             <span className='flex gap-1 items-center'>
-              <p className='text-[#0063FF] font-semibold'>Step 1</p>
-              <p className='text-[#D9D9D9]'>of 6</p>
+              <p className='text-blue-700 font-semibold'>Step 1</p>
+              <p className='text-gray-400'>of 6</p>
             </span>
-            <span className='flex items-center gap-2'>
-              <span class="bg-[#0063FF] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#0063FF] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-            </span>
+          <span className='flex items-center gap-2'>
+            <span className="bg-[#0063FF] w-11 h-3 rounded-full"></span>
+            <span className="bg-[#0063FF] w-11 h-3 rounded-full"></span>
+            <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+            <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+            <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+            <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+          </span>
           </div>
           {open && (
             <div className='fixed top-15 left-0' ref={navRef}>
@@ -203,11 +216,11 @@ const Guardian = () => {
           )}
          </div>
       {/* page content */}
-      <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 mt-20 mb-10'>
+      <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-5 md:gap-10 mt-20 mb-10'>
         {/* illustration display */}
         <div className=''>
-          <div className='flex flex-col gap-2 w-full'>
-            <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start'>Guardian Information</span>
+          <div className='flex flex-col gap-2'>
+            <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start text-[#002359]'>Guardian Information</span>
             <span className='text-gray-500 text-center md:text-start'>Provide your guardian contact information</span>
           </div>
           <div className='flex justify-center w-full'>
@@ -219,14 +232,14 @@ const Guardian = () => {
           </div>
         </div>
         {/* form */}
-        <div className='w-full ml-3 md:ml-0'>
-          <span className='text-2xl font-bold'>Enter your guardian's details</span>
+        <div className=' md:ml-0'>
+          <span className='text-2xl font-bold text-[#002359]'>Enter your guardian's details</span>
           <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-4 mt-6'>
             <div className='grid grid-cols-1 gap-5'>
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Full Name</span>
+                  <span className='font-semibold text-[#002359]'>Full Name</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -242,7 +255,7 @@ const Guardian = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Relationship To Applicant</span>
+                  <span className='font-semibold text-[#002359]'>Relationship To Applicant</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -265,7 +278,7 @@ const Guardian = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Occupation</span>
+                  <span className='font-semibold text-[#002359]'>Occupation</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -281,7 +294,7 @@ const Guardian = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Nationality</span>
+                  <span className='font-semibold text-[#002359]'>Nationality</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -299,7 +312,7 @@ const Guardian = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Phone Number</span>
+                  <span className='font-semibold text-[#002359]'>Phone Number</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -315,7 +328,7 @@ const Guardian = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Emergency Line</span>
+                  <span className='font-semibold text-[#002359]'>Emergency Line</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -332,7 +345,7 @@ const Guardian = () => {
             <div>
               {/* label */}
               <div className='flex'>
-                <span className='font-semibold'>Email</span>
+                <span className='font-semibold text-[#002359]'>Email</span>
               </div>
               {/* input */}
               <input
@@ -347,7 +360,7 @@ const Guardian = () => {
             <div>
               {/* label */}
               <div className='flex'>
-                <span className='font-semibold'>Address</span>
+                <span className='font-semibold text-[#002359]'>Address</span>
                 <span className='text-red-500'>*</span>
               </div>
               {/* input */}
@@ -360,7 +373,8 @@ const Guardian = () => {
                 className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
               />
             </div>
-            <div className='flex items-center justify-between mt-6 mb-10'>
+            {/* Proceeding to Next page */}
+            <div className={`${!isEditing ? 'flex' : 'hidden'} items-center justify-between mt-6 mb-10`}>
               <button 
                 type="button"
                 onClick={() => navigate('/personal')}
@@ -375,6 +389,18 @@ const Guardian = () => {
               >
                 <span>Continue</span>
                 <span className='font-bold'>&gt;</span>
+              </button>
+            </div>
+            {/* button For Update */}
+            <div className={`${isEditing ? 'flex' : 'hidden'} items-center mt-6 mb-12 w-full`}>
+              <button 
+                type="submit"
+                className='bg-blue-700 text-white shadow-md shadow-blue-400 text-lg font-semibold px-4 py-2 rounded-lg flex justify-center items-center gap-2 cursor-pointer hover:font-bold active:scale-105 w-full'
+              >
+                <span>Update</span>
+                <span className='font-bold'>
+                  <img src={updateIcon} alt='Update icon' className='w-5 h-5' />
+                </span>
               </button>
             </div>
           </form>

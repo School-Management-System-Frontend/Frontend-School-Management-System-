@@ -5,12 +5,18 @@ import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
 import PersonalPic from '../assets/personal.png';
+import updateIcon from '../assets/update.png';
 
 const Personal = () => {
   const { formData, updateFormData } = useFormContext();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const navRef = useRef(null);
   const menuRef = useRef(null);
+  
+  // Detect if user is editing from Review page
+  const [isEditing, setIsEditing] = useState(false);
+  
   const [personalData, setPersonalData] = useState({
     firstName: '',
     lastName: '',
@@ -36,6 +42,12 @@ const Personal = () => {
     if (formData.personal) {
       setPersonalData(formData.personal);
     }
+    
+    // Check if user came from Review page (edit mode) - persisted in sessionStorage
+    const isEditingMode = sessionStorage.getItem('isEditing') === 'true';
+    if (isEditingMode) {
+      setIsEditing(true);
+    }
   }, [formData.personal]);
 
  // Close on outside click
@@ -54,8 +66,6 @@ const Personal = () => {
        return () => document.removeEventListener("mousedown", handleClickOutside);
      }, [open]);
   
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -131,7 +141,7 @@ const Personal = () => {
     setStatusModal({
       isOpen: true,
       isSuccess: true,
-      title: 'Application Submitted Successfully',
+      title: isEditing ? 'Changes Saved Successfully' : 'Application Submitted Successfully',
       message: 'Your Personal information has been saved and submitted for review',
       missingFields: []
     });
@@ -139,7 +149,14 @@ const Personal = () => {
     // Navigate after 2 seconds
     setTimeout(() => {
       setStatusModal({ ...statusModal, isOpen: false });
-      navigate('/guardian');
+      // Clear the editing flag from sessionStorage
+      sessionStorage.removeItem('isEditing');
+      // If editing, go back to review; otherwise go to next page
+      if (isEditing) {
+        navigate('/review');
+      } else {
+        navigate('/guardian');
+      }
     }, 2000);
   };
 
@@ -158,20 +175,20 @@ const Personal = () => {
         onClose={handleCloseModal}
       />
       {/* page header */}
-         <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200'>
+         <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200 z-50'>
           <Header open={open} setOpen={setOpen} menuRef={menuRef}/>
-          <div className='flex flex-col justify-center items-center gap-1 mr-4 fixed bottom-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
+          <div className='flex flex-col justify-center items-center md:items-start gap-1 fixed bottom-0 left-0 right-0 border-t border-gray-300 md:border-none md:static bg-white p-5  md:p-0 '>
             <span className='flex gap-1 items-center'>
-              <p className='text-[#0063FF] font-semibold'>Step 1</p>
-              <p className='text-[#D9D9D9]'>of 6</p>
+              <p className='text-blue-700 font-semibold'>Step 1</p>
+              <p className='text-gray-400'>of 6</p>
             </span>
             <span className='flex items-center gap-2'>
-              <span class="bg-[#0063FF] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
-              <span class="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#0063FF] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
+              <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
             </span>
           </div>
           {open && (
@@ -185,7 +202,7 @@ const Personal = () => {
           {/* illustration display */}
           <div className=''>
             <div className='flex flex-col gap-2 w-full'>
-              <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start'>Personal Information</span>
+              <span className='text-3xl md:text-4xl text-[#002359] font-extrabold text-center md:text-start'>Personal Information</span>
               <span className='text-gray-500 text-center md:text-start'>Enter your basic personal details as they appear on official documents.</span>
             </div>
             <div className='flex justify-center'>
@@ -198,13 +215,13 @@ const Personal = () => {
           </div>
           {/* form */}
           <div className='w-full'>
-            <span className='text-2xl font-bold'>Enter your personal details</span>
+            <span className='text-2xl font-bold text-[#002359]'>Enter your personal details</span>
             <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-4 mt-6'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-10'>
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>First Name</span>
+                    <span className='font-semibold text-[#002359]'>First Name</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -220,7 +237,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Last Name</span>
+                    <span className='font-semibold text-[#002359]'>Last Name</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -238,7 +255,7 @@ const Personal = () => {
                 <div>
                   {/* label */} 
                   <div className='flex'>
-                    <span className='font-semibold'>Other Names</span>
+                    <span className='font-semibold text-[#002359]'>Other Names</span>
                   </div>
                   {/* input */}
                   <input
@@ -253,7 +270,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Gender</span>
+                    <span className='font-semibold text-[#002359]'>Gender</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -271,7 +288,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Date Of Birth</span>
+                    <span className='font-semibold text-[#002359]'>Date Of Birth</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -286,7 +303,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Nationality</span>
+                    <span className='font-semibold text-[#002359]'>Nationality</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -304,7 +321,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Phone Number</span>
+                    <span className='font-semibold text-[#002359]'>Phone Number</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -320,7 +337,7 @@ const Personal = () => {
                 <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Email</span>
+                    <span className='font-semibold text-[#002359]'>Email</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -337,7 +354,7 @@ const Personal = () => {
               <div>
                   {/* label */}
                   <div className='flex'>
-                    <span className='font-semibold'>Address</span>
+                    <span className='font-semibold text-[#002359]'>Address</span>
                     <span className='text-red-500'>*</span>
                   </div>
                   {/* input */}
@@ -350,21 +367,26 @@ const Personal = () => {
                     className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150'
                   />
                 </div>
-              <div className='flex justify-end items-center mt-6 mb-12 w-full'>
-                {/* <button 
-                  type="button"
-                  onClick={() => navigate(-1)}
-                  className='bg-white border-2 border-blue-600 text-[#002359] font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold active:scale-105'
-                >
-                  <span className='font-bold'>&lt;</span>
-                  <span>Previous</span>
-                </button> */}
+                {/* Proceeding to Next page */}
+              <div className={`${!isEditing ? 'flex' : 'hidden'} justify-end items-center mt-6 mb-12 w-full`}>
                 <button 
                   type="submit"
                   className='bg-blue-700 text-white shadow-md shadow-blue-400 font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold active:scale-105'
                 >
                   <span>Continue</span>
                   <span className='font-bold'>&gt;</span>
+                </button>
+              </div>
+              {/* button For Update */}
+              <div className={`${isEditing ? 'flex' : 'hidden'} items-center mt-6 mb-12 w-full`}>
+                <button 
+                  type="submit"
+                  className='bg-blue-700 text-white shadow-md shadow-blue-400 text-lg font-semibold px-4 py-2 rounded-lg flex justify-center items-center gap-2 cursor-pointer hover:font-bold active:scale-105 w-full'
+                >
+                  <span>Update</span>
+                  <span className='font-bold'>
+                    <img src={updateIcon} alt='Update icon' className='w-5 h-5' />
+                  </span>
                 </button>
               </div>
             </form>

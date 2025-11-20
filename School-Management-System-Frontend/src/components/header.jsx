@@ -14,7 +14,7 @@ const Header = ({open, setOpen, menuRef}) => {
             <img src={hatIcon} alt="School Hat Icon" className='w-14 h-10' />
         </div>
         <div className='flex text-2xl font-bold font-[Young_Serif]'>
-            <span>Edu</span>
+            <span className='text-[#002359]' >Edu</span>
             <span className='text-blue-700'>Radiant</span>
         </div>
       </div>

@@ -16,7 +16,7 @@ const Status = ({
 
   return (
     <div>
-        <div className='bg-black/80 fixed inset-0 flex items-center justify-center z-[9999]'>  
+        <div className='bg-black/80 fixed inset-0 flex items-center justify-center z-9999'>  
             <div className='bg-white p-6 rounded-2xl w-160 relative'>
                 {/* Success State */}
                 {isSuccess && (

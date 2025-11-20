@@ -54,7 +54,7 @@ const NavBar = () => {
   const firstName = formData.personal?.firstName || 'User';
   const lastName = formData.personal?.lastName || '';
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  const fullName = firstName && lastName ? `${firstName} ${lastName}` : 'Kofi Mensah';
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : 'User Name';
 
   // Handle logout
   const handleLogout = () => {
@@ -115,7 +115,7 @@ const NavBar = () => {
           );
         })}
       </div>
-      <div className='flex flex-col gap-2'>
+      <div className='flex flex-col gap-2 -mt-5'>
         <div 
           onClick={handleLogout}
           className="flex items-center gap-4 w-60 cursor-pointer group hover:rounded-2xl active:rounded-2xl hover:bg-red-600 active:bg-red-600 hover:shadow-md active:shadow-md hover:shadow-red-400 active:shadow-red-400 hover:scale-105 active:scale-105 transition-transform duration-150 ease-in-out p-2"

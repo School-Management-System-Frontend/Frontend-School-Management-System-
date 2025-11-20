@@ -5,6 +5,7 @@ import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
 import AcademicPic from '../assets/Academic.png';
+import updateIcon from '../assets/update.png';
 
 const Academic = () => {
   const { formData, updateFormData } = useFormContext();
@@ -27,11 +28,17 @@ const Academic = () => {
     message: '',
     missingFields: []
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   // Load saved data if it exists
   useEffect(() => {
     if (formData.academic) {
       setAcademicData(formData.academic);
+    }
+    // Check if user came from Review page (edit mode) - persisted in sessionStorage
+    const isEditingMode = sessionStorage.getItem('isEditing') === 'true';
+    if (isEditingMode) {
+      setIsEditing(true);
     }
   }, [formData.academic]);
 
@@ -103,7 +110,7 @@ const Academic = () => {
     setStatusModal({
       isOpen: true,
       isSuccess: true,
-      title: 'Application Submitted Successfully',
+      title: isEditing ? 'Changes Saved Successfully' : 'Application Submitted Successfully',
       message: 'Your Academic information has been saved and submitted for review',
       missingFields: []
     });
@@ -111,7 +118,13 @@ const Academic = () => {
     // Navigate after 2 seconds
     setTimeout(() => {
       setStatusModal({ ...statusModal, isOpen: false });
-      navigate('/health');
+      // Clear the editing flag from sessionStorage
+      sessionStorage.removeItem('isEditing');
+      if (isEditing) {
+        navigate('/review');
+      } else {
+        navigate('/health');
+      }
     }, 2000);
   };
 
@@ -130,12 +143,12 @@ const Academic = () => {
         onClose={handleCloseModal}
       />
       {/* page header */}
-      <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200'>
+      <div className='flex justify-between fixed top-0 left-0 w-full p-4 px-3 bg-white shadow-md shadow-gray-200 z-50'>
         <Header open={open} setOpen={setOpen} menuRef={menuRef} />
-        <div className='flex flex-col justify-center items-center gap-1 mr-4 fixed bottom-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
+        <div className='flex flex-col justify-center items-center md:items-start gap-1 fixed bottom-0 left-0 right-0 border-t border-gray-300 md:border-none md:static bg-white md:bg-transparent p-5  md:p-0 '>
           <span className='flex gap-1 items-center'>
-            <p className='text-[#0063FF] font-semibold'>Step 3</p>
-            <p className='text-[#D9D9D9]'>of 6</p>
+            <p className='text-blue-700 font-semibold'>Step 3</p>
+            <p className='text-gray-400'>of 6</p>
           </span>
           <span className='flex items-center gap-2'>
             <span className="bg-[#0063FF] w-11 h-3 rounded-full"></span>
@@ -157,7 +170,7 @@ const Academic = () => {
         {/* illustration display */}
         <div className='flex flex-col gap-2 w-full'>
           <div className='flex flex-col gap-2'>
-            <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start'>Academic Information</span>
+            <span className='text-3xl md:text-4xl font-extrabold text-center md:text-start text-[#002359]'>Academic Information</span>
             <span className='text-gray-500 text-center md:text-start'>Provide your academic history from your previous school</span>
           </div>
           <div className='flex justify-center'>
@@ -170,13 +183,13 @@ const Academic = () => {
         </div>
         {/* form */}
         <div className='w-full'>
-          <span className='text-2xl font-bold'>Please provide your academic history</span>
+          <span className='text-2xl font-bold text-[#002359]'>Please provide your academic history</span>
           <form noValidate onSubmit={handleSubmit} className='flex flex-col gap-4 mt-6'>
             <div className='grid grid-cols-1 gap-5'>
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>Previous School Attended</span>
+                  <span className='font-semibold text-[#002359]'>Previous School Attended</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -192,7 +205,7 @@ const Academic = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>School Address</span>
+                  <span className='font-semibold text-[#002359]'>School Address</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -210,7 +223,7 @@ const Academic = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>From</span>
+                  <span className='font-semibold text-[#002359]'>From</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -225,7 +238,7 @@ const Academic = () => {
               <div>
                 {/* label */}
                 <div className='flex'>
-                  <span className='font-semibold'>To</span>
+                  <span className='font-semibold text-[#002359]'>To</span>
                   <span className='text-red-500'>*</span>
                 </div>
                 {/* input */}
@@ -241,7 +254,7 @@ const Academic = () => {
             <div>
               {/* label */}
               <div className='flex'>
-                <span className='font-semibold'>Class Completed</span>
+                <span className='font-semibold text-[#002359]'>Class Completed</span>
                 <span className='text-red-500'>*</span>
               </div>
               {/* input */}
@@ -266,7 +279,7 @@ const Academic = () => {
             <div>
               {/* label */}
               <div className='flex'>
-                <span className='font-semibold'>Reason for Leaving</span>
+                <span className='font-semibold text-[#002359]'>Reason for Leaving</span>
               </div>
               {/* input */}
               <textarea
@@ -277,7 +290,8 @@ const Academic = () => {
                 className='bg-[#f38ef334] rounded-3xl p-2 px-4 w-full h-18 focus:outline-[#0063FF] focus:scale-103 hover:scale-103 transition-transform delay-150 '
               />
             </div>
-            <div className='flex items-center justify-between mt-6 mb-10'>
+            {/* Proceeding to Next page */}
+            <div className={`${!isEditing ? 'flex' : 'hidden'} justify-between items-center mt-6 mb-10`}>
               <button 
                 type="button"
                 onClick={() => navigate('/guardian')}
@@ -292,6 +306,18 @@ const Academic = () => {
               >
                 <span>Continue</span>
                 <span className='font-bold'>&gt;</span>
+              </button>
+            </div>
+            {/* button For Update */}
+            <div className={`${isEditing ? 'flex' : 'hidden'} items-center mt-6 mb-12 w-full`}>
+              <button 
+                type="submit"
+                className='bg-blue-700 text-white shadow-md shadow-blue-400 text-lg font-semibold px-4 py-2 rounded-lg flex justify-center items-center gap-2 cursor-pointer hover:font-bold active:scale-105 w-full'
+              >
+                <span>Update</span>
+                <span className='font-bold'>
+                  <img src={updateIcon} alt='Update icon' className='w-5 h-5' />
+                </span>
               </button>
             </div>
           </form>
