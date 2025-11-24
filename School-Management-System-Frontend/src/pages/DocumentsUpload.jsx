@@ -5,11 +5,12 @@ import { saveDocumentData, loadDocumentData } from '../utils/indexedDB';
 import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
-import DocumentPic from '../assets/document.png';
+import DocumentPic from '/illustrations/document.png';
 import userPic from '../assets/user.png';
 import addIcon from '../assets/add.png';
 import viewIcon from '../assets/view.png';
 import updateIcon from '../assets/update.png';
+import { motion } from 'framer-motion';
 
 const DocumentsUpload = () => {
   const { formData, updateFormData } = useFormContext();
@@ -133,6 +134,11 @@ const DocumentsUpload = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+// scroll to top
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
 
   const navigate = useNavigate();
 
@@ -531,6 +537,12 @@ const DocumentsUpload = () => {
           </div>
         )}
       </div>
+      <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+      {/* page content */}
       <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 mt-20 mb-10'>
         <div className='flex flex-col gap-2 w-full'>
           <div className='flex flex-col gap-2'>
@@ -656,6 +668,7 @@ const DocumentsUpload = () => {
           </form>
         </div>
       </div>
+      </motion.div>
 
       {/* Hidden file input */}
       <input 
@@ -669,6 +682,11 @@ const DocumentsUpload = () => {
       {/* Modal - Document Upload Dialog */}
       {showModal && (
         <div className='bg-black/80 fixed inset-0 flex items-center justify-center z-50'>  
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
           <div className='bg-white p-6 rounded-2xl w-96 relative gap-4 flex flex-col'>
             <div>
               {/* label */}
@@ -732,6 +750,7 @@ const DocumentsUpload = () => {
               </button>
             </div>
           </div>
+          </motion.div>
         </div>
       )}
     </div>

@@ -69,10 +69,10 @@ button:hover {
   border-color: #646cff;
   /* border-color: #e6a7e0; */
 }
-button:focus,
+/* button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   color: #a3a2a2;

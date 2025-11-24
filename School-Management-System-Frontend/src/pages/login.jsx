@@ -72,7 +72,7 @@ export default function Login() {
             </motion.div>
 
             {/* Login view fron the right */}
-            <div className="lg:w-1/2 bg-gray-50 flex items-center justify-center p-8">
+            <div className="lg:w-1/2 bg-gray-50 flex flex-col gap-4 items-center justify-center p-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -125,7 +125,7 @@ export default function Login() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPin(!showPin)}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer focus-none"
                                 >
                                     {showPin ? (
                                         <EyeOff className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default function Login() {
                             Sign In
                         </motion.button>
 
-                        <div className="text-center mt-6">
+                        <div className="text-center mt-6"> 
                             <a href="#" className="text-sm text-gray-500 hover:text-pink-600 transition-colors">
                                 Need help? <span className="font-semibold">Contact Administrator</span>
                             </a>
@@ -153,7 +153,7 @@ export default function Login() {
                     </form>
                 </motion.div>
 
-                <div className="absolute bottom-6 text-center text-gray-400 text-xs">
+                <div className="md:absolute md:bottom-6 text-center text-gray-400 text-xs">
                     &copy; {new Date().getFullYear()} School Management System. All rights reserved.
                 </div>
             </div>

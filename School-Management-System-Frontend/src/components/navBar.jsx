@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import check1 from '../assets/check1.png';
 import check2 from '../assets/check3.png';
 import logOut from '../assets/logout.png';
 import logoutWhite from '../assets/logoutW.png';
+import logoutPic from '../assets/logoutPic.png';
 
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { formData, clearFormData } = useFormContext();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Get current page
   const currentPage = location.pathname.replace('/', '');
@@ -58,9 +60,19 @@ const NavBar = () => {
 
   // Handle logout
   const handleLogout = () => {
-    // Clear all data
+    setShowLogoutConfirm(true);
+  };
+
+  // Confirm logout
+  const confirmLogout = () => {
     clearFormData();
+    setShowLogoutConfirm(false);
     navigate('/');
+  };
+
+  // Cancel logout
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
   };
 
   // Navigate to page
@@ -81,6 +93,34 @@ const NavBar = () => {
 
   return (
     <div className='shadow-2xl h-screen flex flex-col p-4 justify-around py-4 bg-white mt-3 animate-slide-in'>
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className='fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50'>
+          <div className='bg-white rounded-lg shadow-lg p-6 w-80 flex flex-col justify-center items-center'>
+            <div>
+              <img src={logoutPic} alt='lgout illustration' className='w-24 h-24' />
+            </div>
+            <div className='flex flex-col justify-center items-center gap-3 mt-3'>
+              <span className='text-[#002359] text-2xl font-bold text-center'>Confirm Logout</span>
+              <span className='text-gray-600'>Are you sure you want to logout?</span>
+            </div>
+            <div className='flex items-center mt-2 gap-8 mt-3 justify-between w-full'>
+              <button 
+                onClick={cancelLogout}
+                className='bg-white border-2 border-blue-700 w-full text-[#002359] font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold hover:scale-105 active:scale-105 transition-transform duration-150 ease-in-out justify-center'
+              >
+                <span>No</span>
+              </button>
+              <button 
+                onClick={confirmLogout}
+                className='bg-red-600 text-white w-full shadow-md shadow-red-300 font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold hover:scale-105 active:scale-105 transition-transform duration-150 ease-in-out justify-center'
+              >
+                <span>Yes</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className='flex flex-col gap-4 -mt-16'>
         {pages.map((page) => {
           const isCurrent = currentPageKey === page.key;

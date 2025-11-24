@@ -1,8 +1,9 @@
-import React from 'react'
+import {React, useEffect} from 'react'
 import correctIcon from '../assets/correct.png';
 import closeGreenIcon from '../assets/closeGreen.png'
 import closeRedIcon from '../assets/closeRed.png';
 import wrongIcon from '../assets/wrong.png'
+import { motion } from 'framer-motion';
 
 const Status = ({ 
   isOpen = false, 
@@ -14,10 +15,20 @@ const Status = ({
 }) => {
   if (!isOpen) return null;
 
+// scroll to top
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
+
   return (
     <div>
         <div className='bg-black/80 fixed inset-0 flex items-center justify-center z-9999'>  
-            <div className='bg-white p-6 rounded-2xl w-160 relative'>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <div className='bg-white p-6 rounded-2xl w-full md:w-160 relative'>
                 {/* Success State */}
                 {isSuccess && (
                   <div className='flex flex-col'>
@@ -80,6 +91,7 @@ const Status = ({
                   </div>
                 )}
             </div>
+            </motion.div>
         </div>
     </div>
   )

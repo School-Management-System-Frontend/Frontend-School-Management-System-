@@ -7,7 +7,7 @@ import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
 import Loader from '../components/Loader.jsx';
 import ScrollList from '../components/ScrollList.jsx';
-import ReviewPic from '../assets/review.png';
+import ReviewPic from '/illustrations/review.png';
 import editIcon from '../assets/edit.png';
 import closeWhiteIcon from '../assets/closeWhite.png';
 import monkeyIcon from '../assets/monkey.png';
@@ -15,6 +15,7 @@ import correctIcon from '../assets/correct.png';
 import fireworksIcon from '../assets/fireworks.gif';
 import logoutWhite from '../assets/logoutW.png';
 import submitIcon from '../assets/submit.png';
+import { motion } from 'framer-motion';
 
 const Review = () => {
   const { formData, clearFormData } = useFormContext();
@@ -75,6 +76,11 @@ const Review = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+// scroll to top
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
 
   const renderValue = (value) => {
     if (!value) {
@@ -289,6 +295,11 @@ const Review = () => {
           </div>
         )}
       </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
       {/* page content */}
       <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10 mt-20 mb-10'>
         {/* illustration display */}
@@ -580,6 +591,7 @@ const Review = () => {
           </div>
         </div>
       </div>
+      </motion.div>
 
         <div className={`${showSubmissionModal ? 'flex' : 'hidden'} bg-black/80 fixed inset-0 items-center justify-center z-50`}>  
             {/* Submission Failed */}

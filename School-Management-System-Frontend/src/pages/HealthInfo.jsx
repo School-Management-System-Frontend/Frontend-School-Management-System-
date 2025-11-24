@@ -4,8 +4,9 @@ import { useFormContext } from '../context/FormContext';
 import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
-import HealthPic from '../assets/Health.png';
+import HealthPic from '/illustrations/Health.png';
 import updateIcon from '../assets/update.png';
+import { motion } from 'framer-motion';
 
 const HealthInfo = () => {
   const { formData, updateFormData } = useFormContext();
@@ -57,6 +58,11 @@ const HealthInfo = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+  // scroll to top
+    useEffect(() => {
+      window.scrollTo(0,0)
+    }, [])
 
   const navigate = useNavigate();
 
@@ -157,6 +163,11 @@ const HealthInfo = () => {
           </div>
         )}
       </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
       {/* page content */}
       <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-1 md:gap-10 mt-20 mb-10'>
         {/* illustration display */}
@@ -300,6 +311,7 @@ const HealthInfo = () => {
           </form>
         </div>
       </div>
+      </motion.div>
     </div>
   );
 };

@@ -4,8 +4,9 @@ import { useFormContext } from '../context/FormContext';
 import Header from '../components/header.jsx';
 import NavBar from '../components/navBar.jsx';
 import Status from '../components/status.jsx';
-import GuardianPic from '../assets/guardian.png';
+import GuardianPic from '/illustrations/guardian.png';
 import updateIcon from '../assets/update.png';
+import { motion } from 'framer-motion';
 
 const Guardian = () => {
   const { formData, updateFormData } = useFormContext();
@@ -61,6 +62,11 @@ const Guardian = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+    // scroll to top
+    useEffect(() => {
+      window.scrollTo(0,0)
+    }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -215,6 +221,11 @@ const Guardian = () => {
           </div>
           )}
          </div>
+         <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
       {/* page content */}
       <div className='grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-5 md:gap-10 mt-20 mb-10'>
         {/* illustration display */}
@@ -406,6 +417,7 @@ const Guardian = () => {
           </form>
         </div>
       </div>
+      </motion.div>
     </div>
   );
 };
