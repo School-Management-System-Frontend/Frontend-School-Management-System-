@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { FormProvider } from './context/FormContext'
 import Login from './pages/login'
+import Dashboard from './pages/Dashboard'
 import AcademicHistory from './pages/AcademicHistory'
 import HealthInfo from './pages/HealthInfo'
 import DocumentsUpload from './pages/DocumentsUpload'
@@ -15,6 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/personal" element={<Personal_Info />} />
           <Route path="/academic" element={<AcademicHistory />} />
           <Route path="/health" element={<HealthInfo />} />
