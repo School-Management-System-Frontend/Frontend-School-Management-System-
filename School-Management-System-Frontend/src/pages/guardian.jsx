@@ -215,11 +215,9 @@ const Guardian = () => {
             <span className="bg-[#D9D9D9] w-11 h-3 rounded-full"></span>
           </span>
           </div>
-          {open && (
-            <div className='fixed top-15 left-0' ref={navRef}>
-            <NavBar/>
+          <div className={`fixed top-15 left-0 ${open ? 'pointer-events-auto' : 'pointer-events-none'}`} ref={navRef}>
+            <NavBar isOpen={open} />
           </div>
-          )}
          </div>
          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -388,7 +386,7 @@ const Guardian = () => {
             <div className={`${!isEditing ? 'flex' : 'hidden'} items-center justify-between mt-6 mb-10`}>
               <button 
                 type="button"
-                onClick={() => navigate('/personal')}
+                onClick={() => navigate('/personal')} 
                 className='bg-white border-2 border-blue-600 text-[#002359] font-semibold px-4 py-2 rounded-lg flex gap-2 cursor-pointer hover:font-bold active:scale-105'
               >
                 <span className='font-bold'>&lt;</span>

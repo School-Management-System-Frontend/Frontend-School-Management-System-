@@ -27,9 +27,24 @@
   }
 }
 
+/* Slide out animation for navbar */
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
 @layer components {
   .animate-slide-in {
     animation: slideInLeft 0.3s ease-in-out;
+  }
+  .animate-slide-out {
+    animation: slideOutLeft 0.3s ease-in-out forwards;
   }
 }
 

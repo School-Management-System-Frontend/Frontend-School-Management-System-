@@ -7,7 +7,7 @@ import logOut from '../assets/logout.png';
 import logoutWhite from '../assets/logoutW.png';
 import logoutPic from '../assets/logoutPic.png';
 
-const NavBar = () => {
+const NavBar = ({ isOpen = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { formData, clearFormData } = useFormContext();
@@ -92,7 +92,7 @@ const NavBar = () => {
   ];
 
   return (
-    <div className='shadow-2xl h-screen flex flex-col p-4 justify-around py-4 bg-white mt-3 animate-slide-in'>
+    <div className={`shadow-2xl h-screen flex flex-col p-4 justify-around py-4 bg-white mt-3 ${isOpen ? 'animate-slide-in' : 'animate-slide-out pointer-events-none'}`}>
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
         <div className='fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50'>
@@ -121,20 +121,22 @@ const NavBar = () => {
           </div>
         </div>
       )}
+      
+      {/* Navbar */}
       <div className='flex flex-col gap-4 -mt-16'>
         {pages.map((page) => {
           const isCurrent = currentPageKey === page.key;
           const isCompleted = isPageCompleted(page.key);
           const isAccessible = isPageAccessible(page.key);
-          const icon = (isCurrent || isCompleted) ? check1 : check2;
+          const icon = !isCurrent && (isCompleted ? check1 : check2);
 
           let bgClass = '';
           let cursorClass = 'cursor-pointer';
           
           if (isCurrent) {
-            bgClass = 'bg-[#08a13b] shadow-green-300 shadow-md';
-          } else if (isCompleted) {
             bgClass = 'bg-[#0063FF] shadow-blue-300 shadow-md';
+          } else if (isCompleted) {
+            bgClass = 'bg-[#08a13b] shadow-green-300 shadow-md';
           }
           
           if (!isAccessible) {
@@ -145,17 +147,25 @@ const NavBar = () => {
             <div
               key={page.key}
               onClick={() => navigateToPage(page.key)}
-              className={`${bgClass} ${cursorClass} rounded-2xl p-2 px-3 flex items-center justify-between w-60 ${isAccessible ? 'hover:scale-105 active:scale-105' : ''} transition-transform duration-150 ease-in-out`}
+              className={`${bgClass} ${cursorClass} rounded-2xl p-2 px-3 flex items-center ${isCompleted && !isCurrent ? 'justify-between' : 'justify-center'} w-60 ${isAccessible || isCurrent ? 'hover:scale-105 active:scale-105' : ''} transition-transform duration-150 ease-in-out`}
             >
               <span className={`font-semibold text-lg ${isCurrent || isCompleted ? 'text-white' : 'text-gray-700'}`}>
                 {page.label}
               </span>
+              {isCompleted && !isCurrent &&  (
               <img src={icon} alt="Check Icon" className='w-5 h-5 inline-block ml-2' />
+              )}
             </div>
           );
         })}
       </div>
       <div className='flex flex-col gap-2 -mt-5'>
+        <div
+        onClick={() => navigate('/dashboard')}
+        className="font-bold pl-8"
+        >
+          Dashboard
+        </div>
         <div 
           onClick={handleLogout}
           className="flex items-center gap-4 w-60 cursor-pointer group hover:rounded-2xl active:rounded-2xl hover:bg-red-600 active:bg-red-600 hover:shadow-md active:shadow-md hover:shadow-red-400 active:shadow-red-400 hover:scale-105 active:scale-105 transition-transform duration-150 ease-in-out p-2"

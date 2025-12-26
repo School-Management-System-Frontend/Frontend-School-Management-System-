@@ -289,11 +289,9 @@ const Review = () => {
             <span className="bg-[#0063FF] w-11 h-3 rounded-full"></span>
           </span>
         </div>
-        {open && (
-          <div className='fixed top-15 left-0' ref={navRef}>
-            <NavBar/>
-          </div>
-        )}
+        <div className={`fixed top-15 left-0 ${open ? 'pointer-events-auto' : 'pointer-events-none'}`} ref={navRef}>
+          <NavBar isOpen={open} />
+        </div>
       </div>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
