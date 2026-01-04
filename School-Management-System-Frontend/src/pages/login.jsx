@@ -1,14 +1,16 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { User, Lock, Eye, EyeOff, BookOpen, CheckCircle2 } from "lucide-react";
+import loginIcon from '../assets/login.png';
 
 export default function Login() {
     const [serialNumber, setSerialNumber] = useState('');
     const [pin, setPin] = useState('');
     const [showPin, setShowPin] = useState(false);
     const navigate = useNavigate();
+    const targetRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -17,6 +19,13 @@ export default function Login() {
             return;
         }
         navigate("/personal");
+    };
+
+    const scrollDown = () => {
+        targetRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     };
 
     return (
@@ -44,9 +53,22 @@ export default function Login() {
                         School Management System
                     </h1>
 
-                    <p className="text-blue-200 text-lg mb-12 leading-relaxed">
+                    <p className="text-blue-200 text-lg mb-10 md:mb-12 leading-relaxed">
                         Streamline your educational institution with our comprehensive management platformi.
                     </p>
+                    <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            type="submit"
+                            onClick={scrollDown}
+                            className="w-full flex md:hidden justify-center items-center gap-1 py-3 px-3 mb-3 -mt-5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200 cursor-pointer"
+                        >
+                            <span>
+                                <img src={loginIcon} alt='login icon' className='w-6.5 h-auto' />
+                            </span>
+                            <p>Sign In</p>
+                    </motion.button>
+
 
                     <div className="space-y-4">
                         {[
@@ -72,7 +94,7 @@ export default function Login() {
             </motion.div>
 
             {/* Login view fron the right */}
-            <div className="lg:w-1/2 bg-gray-50 flex flex-col gap-4 items-center justify-center p-8">
+            <div ref={targetRef} className="lg:w-1/2 bg-gray-50 flex flex-col gap-4 items-center justify-center p-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
